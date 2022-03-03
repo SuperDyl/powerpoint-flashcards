@@ -1,7 +1,7 @@
 import re
 
 
-class RoomAddress:
+class Room:
     def __init__(self, building, floor, rm_num, rm_letter=''):
         self.floor = floor
         self.rm_num = rm_num
@@ -32,13 +32,10 @@ class RoomAddress:
         clean_string = re.sub(r'Joseph.*', 'JSB', clean_string)
         clean_string = re.sub(r'Heber.*', 'HGB', clean_string)
         clean_string = re.sub(r'(?<=\d)\s*([^\d\s])(?!\w)', r'\g<1>', clean_string)
-        # clean_string = re.sub('(?!\d+ +)([^\d\s]){1} ', ' \g<1>', clean_string)
-        # clean_string = re.sub(' +', ' ', clean_string)
         return clean_string
 
     @staticmethod
     def _split_string(string):
-
         building = re.search(r'[^\d\s]{2,}', string)
         building = "" if not building else building.group(0)
         rm_num = re.search(r'\d{2,}', string)
@@ -46,13 +43,12 @@ class RoomAddress:
         rm_letter = re.search(r'(?<=\d{2})([^\d\s])(?!\w)', string)
         rm_letter = "" if not rm_letter else rm_letter.group(0)
         floor = rm_num[0] if rm_num else ""
-
         return building, floor, rm_num, rm_letter
 
     @classmethod
     def from_string(cls, string):
-        string = RoomAddress._clean_string(string)
-        rm = RoomAddress(*RoomAddress._split_string(string))
+        string = Room._clean_string(string)
+        rm = Room(*Room._split_string(string))
 
         cls.floor = rm.floor
         cls.rm_num = rm.rm_num
@@ -64,9 +60,9 @@ class RoomAddress:
     def from_string_iter(string_iter):
         clean_string = '\n'.join(string_iter)
         # scrub data
-        clean_string = RoomAddress._clean_string(clean_string)
+        clean_string = Room._clean_string(clean_string)
         new_string_iter = clean_string.split('\n')
         # print(new_string_iter)
 
-        return [RoomAddress(*RoomAddress._split_string(room_string))
+        return [Room(*Room._split_string(room_string))
                 for room_string in new_string_iter]

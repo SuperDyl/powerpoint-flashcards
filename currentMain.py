@@ -3,7 +3,7 @@
 A flashcards PowerPoint builder
 """
 
-from room_address import RoomAddress
+from room import Room
 from professor import Professor
 
 from pptx import Presentation
@@ -55,7 +55,7 @@ def pull_professor_data(url="https://religion.byu.edu/directory"):
         room = ''
         try:
             room = tag.find_all('p')[0].contents[0].string.strip()
-            room = RoomAddress.from_string(room)
+            room = Room.from_string(room)
         except IndexError:
             pass
         name = tag.find_all(class_='PromoVerticalImage-title promo-title')[0].find('a').string
