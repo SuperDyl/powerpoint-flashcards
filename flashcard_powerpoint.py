@@ -12,6 +12,11 @@ BLANK_LAYOUT = 6
 # FONT_COLOR_MODE = {"RGB": "rgb"}
 
 
+class SlideTemplate:
+    def __init__(self, **kwargs):
+        pass
+
+
 class FlashcardPowerPoint:
     def __init__(self):
         self.people = list()

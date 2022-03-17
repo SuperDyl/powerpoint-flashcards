@@ -3,8 +3,9 @@ Stores data for a person
 """
 from room import Room
 
+
 class Person:
-    def __init__(self, name: str, room: str, picture: str = "TODO"):  #TODO: add picture support
+    def __init__(self, name: str, room: str, picture: str = "TODO"):  # TODO: add picture support
         self.name = name
         self.room = room
         self.picture = picture
