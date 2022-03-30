@@ -20,7 +20,7 @@ class FlashcardPowerPoint:
         self.font_color = RGBColor(255, 0, 0)
         self.font_color_mode = "rgb"  # FONT_COLOR_MODE["RGB"]
 
-    def _add_default_slide(self, presentation: Presentation, person_name:string):
+    def _add_default_slide(self, presentation: Presentation, person_name: str):
         slide = presentation.slides.add_slide(BLANK_LAYOUT)
         textbox_height = self.name_bottom_padding
         name_textbox = slide.shapes.add_textbox(left=0, top=presentation.slide_height - textbox_height,
@@ -34,19 +34,28 @@ class FlashcardPowerPoint:
         setattr(font.color, self.font_color_mode, self.font_color)
         return slide
 
-    def _add_room_slide(self, presentation: Presentation, person: Person):
-        slide = self._add_default_slide(presentation, person.name)
+    def _add_room_slide(self, presentation: Presentation, person: Person, base_slide=None):
+        if base_slide is None:
+            base_slide = self._add_default_slide
+        slide = base_slide(presentation, person.name)
         return slide
 
-    def _add_picture_slide(self, presentation: Presentation, person: Person):
-        slide = self._add_default_slide(presentation, person.name)
+    def _add_picture_slide(self, presentation: Presentation, person: Person, base_slide=None):
+        if base_slide is None:
+            base_slide = self._add_default_slide
+        slide = base_slide(presentation, person.name)
         return slide
 
-    def _add_slides(self, presentation: Presentation, person: Person):
+    def _add_slides(self, presentation: Presentation, person: Person, room_slide=None, picture_slide=None):
+        if room_slide is None:
+            room_slide = self._add_room_slide
+        if picture_slide is None:
+            picture_slide = self._add_picture_slide
+
         if person.name and person.picture:
-            self._add_picture_slide(presentation, person)
+            room_slide(presentation, person)
         if person.name and person.room:
-            self._add_room_slide(presentation, person)
+            picture_slide(presentation, person)
 
     def add_person(self, person: Person):
         self.people.append(person)
