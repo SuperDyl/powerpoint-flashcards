@@ -19,7 +19,7 @@ class Room:
         return output.strip()
 
     def __repr__(self):
-        return self.building, self.floor, self.rm_num, self.rm_letter
+        return str(self)
 
     def __bool__(self):
         return any((self.building, self.floor, self.rm_num))
@@ -48,13 +48,13 @@ class Room:
     @classmethod
     def from_string(cls, string):
         string = Room._clean_string(string)
-        rm = Room(*Room._split_string(string))
 
-        cls.floor = rm.floor
-        cls.rm_num = rm.rm_num
-        cls.rm_letter = rm.rm_letter
-        cls.building = rm.building
-        return cls
+        # rm =
+        # cls.floor = rm.floor
+        # cls.rm_num = rm.rm_num
+        # cls.rm_letter = rm.rm_letter
+        # cls.building = rm.building
+        return Room(*Room._split_string(string))
 
     @staticmethod
     def from_string_iter(string_iter):
