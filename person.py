@@ -20,7 +20,7 @@ class Person:
 
     @property
     def name(self):
-        return ' '.join(self.first_name, self.last_name)
+        return ' '.join((self.first_name, self.last_name))
 
     def __repr__(self):
         return str(self)
