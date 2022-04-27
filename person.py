@@ -1,7 +1,7 @@
 """
 Stores data for a person
 """
-from room import Room
+from roomold import RoomOld
 
 
 class Person:
@@ -28,7 +28,7 @@ class Person:
     @classmethod  # TODO:Remove from Person class
     def from_string(cls, string):
         *name, room = string.split(', ')
-        prof = Person(', '.join(name), Room.from_string(room))
+        prof = Person(', '.join(name), 'LAST_NAME', RoomOld.from_string(room))
         # cls.name = prof.name
         # cls.room = prof.room
         return prof

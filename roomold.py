@@ -1,7 +1,7 @@
 import re
 
 
-class Room:
+class RoomOld:
     def __init__(self, building, floor, rm_num, rm_letter=''):
         self.floor = floor
         self.rm_num = rm_num
@@ -47,22 +47,22 @@ class Room:
 
     @classmethod
     def from_string(cls, string):
-        string = Room._clean_string(string)
+        string = RoomOld._clean_string(string)
 
         # rm =
         # cls.floor = rm.floor
         # cls.rm_num = rm.rm_num
         # cls.rm_letter = rm.rm_letter
         # cls.building = rm.building
-        return Room(*Room._split_string(string))
+        return RoomOld(*RoomOld._split_string(string))
 
     @staticmethod
     def from_string_iter(string_iter):
         clean_string = '\n'.join(string_iter)
         # scrub data
-        clean_string = Room._clean_string(clean_string)
+        clean_string = RoomOld._clean_string(clean_string)
         new_string_iter = clean_string.split('\n')
         # print(new_string_iter)
 
-        return [Room(*Room._split_string(room_string))
+        return [RoomOld(*RoomOld._split_string(room_string))
                 for room_string in new_string_iter]
