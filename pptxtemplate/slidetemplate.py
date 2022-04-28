@@ -16,4 +16,4 @@ class SlideTemplate:
 
     def add_slide(self, presentation: pptx_presentation):
         """Add a slide to presentation following the template and using these given details"""
-        return presentation.slides.add_slide(self.layout)
+        return presentation.slides.add_slide(presentation.slide_layouts[self.layout])

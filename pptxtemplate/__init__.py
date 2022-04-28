@@ -1,2 +1,2 @@
-from slidetemplate import *
-from textboxtemplate import *
+from .slidetemplate import *
+from .textboxtemplate import *
