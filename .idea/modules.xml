@@ -2,6 +2,7 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
+      <module fileurl="file://$PROJECT_DIR$/../RelEdProfessors/.idea/RelEdProfessors.iml" filepath="$PROJECT_DIR$/../RelEdProfessors/.idea/RelEdProfessors.iml" />
       <module fileurl="file://$PROJECT_DIR$/.idea/powerpoint-flashcards2.iml" filepath="$PROJECT_DIR$/.idea/powerpoint-flashcards2.iml" />
     </modules>
   </component>
