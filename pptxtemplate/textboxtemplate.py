@@ -1,8 +1,8 @@
 """
 Build text boxes as a template for use with python-pptx
 """
-from pptx import slide as pptx_slide
-from pptx.shapes import autoshape as pptx_textbox
+from pptx.slide import Slide
+from pptx.shapes.autoshape import Shape as Textbox
 from pptx.util import Emu
 
 from typing import NamedTuple
@@ -43,9 +43,9 @@ class TextboxTemplate:
     def dimensions(self, new_dimensions: Dimension):
         self.width, self.height = new_dimensions
 
-    def add_textbox(self, slide: pptx_slide) -> pptx_textbox:
+    def add_textbox(self, slide: Slide) -> Textbox:
         """Add a textbox to slide following the template and using these given details"""
         return slide.shapes.add_textbox(self.left, self.top, self.width, self.height)
 
-    def __copy__(self):
+    def __copy__(self) -> 'TextboxTemplate':
         return TextboxTemplate(self.position, self.dimensions)
