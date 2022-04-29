@@ -3,7 +3,7 @@
 A flashcards PowerPoint builder
 """
 
-from templates import professor_slide_template
+from templates import build_professor_slide_func
 from pptxtemplate import SlideTemplate
 
 from professor import Professor
@@ -12,7 +12,7 @@ from pptx import Presentation
 
 if __name__ == "__main__":
     presentation = Presentation()
-    prof_layout = professor_slide_template(SlideTemplate())
+    prof_layout = build_professor_slide_func(SlideTemplate())
 
     all_profs = Professor.from_website()
 

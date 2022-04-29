@@ -46,3 +46,6 @@ class TextboxTemplate:
     def add_textbox(self, slide: pptx_slide) -> pptx_textbox:
         """Add a textbox to slide following the template and using these given details"""
         return slide.shapes.add_textbox(self.left, self.top, self.width, self.height)
+
+    def __copy__(self):
+        return TextboxTemplate(self.position, self.dimensions)
