@@ -9,12 +9,14 @@ from pptx.util import Inches, Pt
 from pptx.dml.color import RGBColor
 from pptx.enum.text import MSO_AUTO_SIZE, PP_PARAGRAPH_ALIGNMENT
 
+from typing import List
+
 # FONT_COLOR_MODE = {"RGB": "rgb"}
 BLANK_LAYOUT = DEFAULT_BLANK_LAYOUT
 
 
 class FlashcardPowerPoint:
-    def __init__(self, people: list = None):
+    def __init__(self, people: List[Person] = None):
         self.people = list(people) if people is not None else list()
         self.name_bottom_padding = Inches(1.58)
         self.font_size = Pt(88)
