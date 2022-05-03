@@ -43,8 +43,8 @@ def add_animations(pptx_file: PathLike):
                 if item.is_file():
                     with open(item, 'r+') as slide_file:
                         file_text = slide_file.read()
-                        file_text.replace(r'<p:grpSpPr/>', X_FRM)
-                        file_text.replace(r'</p:clrMapOvr>', TIMING)
+                        file_text = file_text.replace(r'<p:grpSpPr/>', X_FRM)
+                        file_text = file_text.replace(r'</p:clrMapOvr>', TIMING)
                         slide_file.seek(0)
                         slide_file.write(file_text)
         shutil.make_archive(str(pptx_file), 'zip', temp_dir)
