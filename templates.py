@@ -132,6 +132,11 @@ def build_professor_slide_func(slide_template: SlideTemplate = SlideTemplate())\
     def add_professor_slide(presentation: Presentation, professor_name: str, professor_pic: str) -> Slide:
         """Create, add, and return a new slide formatted for a professor picture flashcard"""
         slide = base_slide_template.add_base_slide(presentation, professor_name)
+        picture = slide.shapes.add_picture(professor_pic, Inches(0), Inches(0))
+        height_ratio = presentation.slide_height / picture.height
+        picture.height = presentation.slide_height
+        picture.width = int(picture.width * height_ratio)
+        picture.left = (presentation.slide_width - picture.width) // 2
         return slide
 
     return add_professor_slide
