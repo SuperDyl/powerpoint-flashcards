@@ -48,7 +48,7 @@ def add_animations(pptx_file: PathLike, start_slide: int = 0) -> None:
     it only exists this way because no open-source library allows editing PowerPoint animations.
 
     :param pptx_file: file path for flashcards PowerPoint to add animations to
-    :param start_slide: all slides >= this number get animations added to them
+    :param start_slide: all slides > this number get animations added to them
     """
     with ZipFile(pptx_file) as zipfile, TemporaryDirectory() as temp_dir:
         zipfile.extractall(temp_dir)
@@ -56,7 +56,7 @@ def add_animations(pptx_file: PathLike, start_slide: int = 0) -> None:
         with scandir(slides_path) as slides_dir:
             for item in slides_dir:
                 slide_num_match = re.search(r'\d+', item.name)
-                if item.is_file() and int(slide_num_match[0]) >= start_slide:
+                if item.is_file() and int(slide_num_match[0]) > start_slide:
                     with open(item, 'r+') as slide_file:
                         file_text = slide_file.read()
                         file_text = file_text.replace(r'<p:grpSpPr/>', X_FRM)
@@ -113,4 +113,4 @@ def build_presentation(file_name: PathLike, all_professors: List[Professor],
 
 if __name__ == "__main__":
     all_profs = Professor.from_website()
-    build_presentation(Path('Example.pptx'), all_profs)
+    build_presentation(Path('Example.pptm'), all_profs, Path('Know Your Colleagues Game with Macros.pptm'))
