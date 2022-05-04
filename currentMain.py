@@ -16,7 +16,7 @@ from pptx import Presentation
 
 from os import scandir, getcwd, path, PathLike
 from pathlib import Path
-from typing import Optional, List
+from typing import Optional, Iterable
 from zipfile import ZipFile
 from tempfile import TemporaryDirectory
 import shutil
@@ -90,7 +90,7 @@ def find_file_extension(file_name: str, directory: Optional[PathLike] = None) ->
         return None
 
 
-def build_presentation(file_name: PathLike, all_professors: List[Professor],
+def build_presentation(file_name: PathLike, all_professors: Iterable[Professor],
                        start_file: Optional[PathLike] = None) -> None:
     """
     Create a flashcards pptx of each professor in all_professors.
@@ -113,4 +113,9 @@ def build_presentation(file_name: PathLike, all_professors: List[Professor],
 
 if __name__ == "__main__":
     all_profs = Professor.from_website()
-    build_presentation(Path('Example.pptm'), all_profs, Path('Know Your Colleagues Game with Macros.pptm'))
+    filtered_profs = (prof for prof in all_profs
+                      if prof.job_title not in ('Adjunct Instructor', 'Visiting Instructor', 'Preservice', 'On Leave')
+                      if prof.department not in ('Salt Lake Center',)
+                      )
+
+    build_presentation(Path('Example.pptm'), filtered_profs, Path('Know Your Colleagues Game with Macros.pptm'))
