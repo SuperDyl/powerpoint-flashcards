@@ -6,13 +6,19 @@ from pptxtemplate import SlideTemplate, TextboxTemplate, Position, Dimension
 
 from pptx.presentation import Presentation
 from pptx.slide import Slide
-from pptx.shapes.autoshape import Shape as Textbox
+from pptx.shapes.autoshape import Shape
 from pptx.util import Inches, Pt
 from pptx.dml.color import RGBColor
 from pptx.enum.text import MSO_AUTO_SIZE, PP_PARAGRAPH_ALIGNMENT
 
 from typing import Callable
 from copy import copy
+
+Textbox = Shape
+
+
+def move_shape(slide: Slide, shape: Shape, new_pos: int) -> None:
+    slide.shapes._spTree.insert(new_pos, shape._element)
 
 
 class TextboxBaseTemplate:
