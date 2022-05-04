@@ -18,6 +18,18 @@ Textbox = Shape
 
 
 def move_shape(slide: Slide, shape: Shape, new_pos: int) -> None:
+    """
+    Move a shape to new_pos in the slide ordering.
+    Indices 0 and 1 are protected system shapes and this function will
+
+
+    :param slide: slide where the shape exists on
+    :param shape: shape to move positions of
+    :param new_pos: position for the slide to be moved to. Indexes 0 and 1 are system shapes and should be avoided
+    :raises IndexError: if new_pos == 0 or 1; both are system shapes
+    """
+    if new_pos < 2:
+        raise IndexError('Indexes 0 and 1 are system shapes: they cannot be messed with')
     slide.shapes._spTree.insert(new_pos, shape._element)
 
 
@@ -119,6 +131,7 @@ def build_room_slide_func(slide_template: SlideTemplate = SlideTemplate()) \
         """Create, add, and return a new slide formatted for a room flashcard"""
         slide = base_slide_template.add_base_slide(presentation, professor_name)
         room_number_template(slide, presentation, room_num)
+        move_shape(slide, slide.shapes[2], len(slide.shapes) - 1)
         return slide
 
     return add_room_slide
@@ -143,6 +156,7 @@ def build_professor_slide_func(slide_template: SlideTemplate = SlideTemplate())\
         picture.height = presentation.slide_height
         picture.width = int(picture.width * height_ratio)
         picture.left = (presentation.slide_width - picture.width) // 2
+        move_shape(slide, picture, 2)
         return slide
 
     return add_professor_slide
