@@ -20,6 +20,7 @@ from typing import Optional, List
 from zipfile import ZipFile
 from tempfile import TemporaryDirectory
 import shutil
+import re
 
 X_FRM = r'<p:grpSpPr><a:xfrm><a:off x="0" y="0"/><a:ext cx="0" cy="0"/>' \
         r'<a:chOff x="0" y="0"/><a:chExt cx="0" cy="0"/></a:xfrm></p:grpSpPr>'
@@ -40,20 +41,22 @@ TIMING = r'</p:clrMapOvr><p:timing><p:tnLst><p:par><p:cTn id="1" dur="indefinite
          r'</p:childTnLst></p:cTn></p:par></p:tnLst><p:bldLst><p:bldP spid="2" grpId="0"/></p:bldLst></p:timing>'
 
 
-def add_animations(pptx_file: PathLike) -> None:
+def add_animations(pptx_file: PathLike, start_slide: int = 0) -> None:
     """
     Add animations to the PowerPoint.
     This is a duck-tape solution:
     it only exists this way because no open-source library allows editing PowerPoint animations.
 
     :param pptx_file: file path for flashcards PowerPoint to add animations to
+    :param start_slide: all slides >= this number get animations added to them
     """
     with ZipFile(pptx_file) as zipfile, TemporaryDirectory() as temp_dir:
         zipfile.extractall(temp_dir)
         slides_path = path.join(temp_dir, 'ppt', 'slides')
         with scandir(slides_path) as slides_dir:
             for item in slides_dir:
-                if item.is_file():
+                slide_num_match = re.search(r'\d+', item.name)
+                if item.is_file() and int(slide_num_match[0]) >= start_slide:
                     with open(item, 'r+') as slide_file:
                         file_text = slide_file.read()
                         file_text = file_text.replace(r'<p:grpSpPr/>', X_FRM)
@@ -87,18 +90,25 @@ def find_file_extension(file_name: str, directory: Optional[PathLike] = None) ->
         return None
 
 
-def build_presentation(file_path: PathLike, all_professors: List[Professor],
+def build_presentation(file_name: PathLike, all_professors: List[Professor],
                        start_file: Optional[PathLike] = None) -> None:
-    """Create a flashcards pptx of each professor in all_professors."""
+    """
+    Create a flashcards pptx of each professor in all_professors.
+
+    :param file_name: name to save the flashcards PowerPoint as
+    :param all_professors: all professors to have slides in the PowerPoint
+    :param start_file: file to be appended to. If None, creates a new file from scratch
+    """
     presentation = Presentation(start_file)
+    slides_count = len(presentation.slides)
     add_prof_slide = build_professor_slide_func(SlideTemplate())
 
     for prof in all_professors:
         picture = find_file_extension(prof.full_name, Path('pictures'))
         add_prof_slide(presentation, prof.full_name, str(picture))
 
-    presentation.save(file_path)
-    add_animations(file_path)
+    presentation.save(file_name)
+    add_animations(file_name, slides_count)
 
 
 if __name__ == "__main__":
