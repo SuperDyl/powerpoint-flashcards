@@ -1,7 +1,12 @@
 #!/usr/bin/python3.6
 """
 A flashcards PowerPoint builder
+
+Constants:
+X_FRM: XML for a group_shape. Necessary for adding animations to the PowerPoint
+TIMING: XML for animation timings. Necessary for adding animations to the PowerPoint
 """
+
 from templates import build_professor_slide_func
 from pptxtemplate import SlideTemplate
 
@@ -18,6 +23,7 @@ import shutil
 
 X_FRM = r'<p:grpSpPr><a:xfrm><a:off x="0" y="0"/><a:ext cx="0" cy="0"/>' \
         r'<a:chOff x="0" y="0"/><a:chExt cx="0" cy="0"/></a:xfrm></p:grpSpPr>'
+
 TIMING = r'</p:clrMapOvr><p:timing><p:tnLst><p:par><p:cTn id="1" dur="indefinite" restart="never" nodeType="tmRoot">' \
          r'<p:childTnLst><p:seq concurrent="1" nextAc="seek"><p:cTn id="2" dur="indefinite" nodeType="mainSeq">' \
          r'<p:childTnLst><p:par><p:cTn id="3" fill="hold"><p:stCondLst><p:cond delay="indefinite"/></p:stCondLst>' \
@@ -34,7 +40,14 @@ TIMING = r'</p:clrMapOvr><p:timing><p:tnLst><p:par><p:cTn id="1" dur="indefinite
          r'</p:childTnLst></p:cTn></p:par></p:tnLst><p:bldLst><p:bldP spid="2" grpId="0"/></p:bldLst></p:timing>'
 
 
-def add_animations(pptx_file: PathLike):
+def add_animations(pptx_file: PathLike) -> None:
+    """
+    Add animations to the PowerPoint.
+    This is a duck-tape solution:
+    it only exists this way because no open-source library allows editing PowerPoint animations.
+
+    :param pptx_file: file path for flashcards PowerPoint to add animations to
+    """
     with ZipFile(pptx_file) as zipfile, TemporaryDirectory() as temp_dir:
         zipfile.extractall(temp_dir)
         slides_path = path.join(temp_dir, 'ppt', 'slides')
@@ -51,7 +64,14 @@ def add_animations(pptx_file: PathLike):
         shutil.move(str(pptx_file) + '.zip', pptx_file)
 
 
-def find_professor_picture(prof_full_name: str, directory: Optional[PathLike] = None) -> Optional[PathLike]:
+def find_file_extension(file_name: str, directory: Optional[PathLike] = None) -> Optional[str]:
+    """
+    Find the file name with its extension knowing only the file name.
+
+    :param file_name: file_name with file extension
+    :param directory: directory to search in. Defaults to working directory
+    :returns: path to file name with extension OR None if no matching file was found
+    """
     if directory is None:
         directory = getcwd()
 
@@ -62,17 +82,19 @@ def find_professor_picture(prof_full_name: str, directory: Optional[PathLike] = 
 
             file_without_extension = path.splitext(item.name)[0]
 
-            if file_without_extension == prof_full_name:
+            if file_without_extension == file_name:
                 return item.path
         return None
 
 
-def build_presentation(file_path: PathLike, all_professors: List[Professor]):
-    presentation = Presentation()
+def build_presentation(file_path: PathLike, all_professors: List[Professor],
+                       start_file: Optional[PathLike] = None) -> None:
+    """Create a flashcards pptx of each professor in all_professors."""
+    presentation = Presentation(start_file)
     add_prof_slide = build_professor_slide_func(SlideTemplate())
 
     for prof in all_professors:
-        picture = find_professor_picture(prof.full_name, Path('pictures'))
+        picture = find_file_extension(prof.full_name, Path('pictures'))
         add_prof_slide(presentation, prof.full_name, str(picture))
 
     presentation.save(file_path)
