@@ -118,4 +118,4 @@ if __name__ == "__main__":
                       if prof.department not in ('Salt Lake Center',)
                       )
 
-    build_presentation(Path('Example.pptm'), filtered_profs, Path('Know Your Colleagues Game with Macros.pptm'))
+    build_presentation(Path('Example.pptm'), filtered_profs, Path('FlashcardStartingPowerpoint.pptm'))
