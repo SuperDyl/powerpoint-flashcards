@@ -21,6 +21,10 @@ from zipfile import ZipFile
 from tempfile import TemporaryDirectory
 import shutil
 import re
+from argparse import ArgumentParser
+from datetime import datetime
+
+INPUT_FILE = Path('FlashcardStartingPowerpoint.pptm')
 
 X_FRM = r'<p:grpSpPr><a:xfrm><a:off x="0" y="0"/><a:ext cx="0" cy="0"/>' \
         r'<a:chOff x="0" y="0"/><a:chExt cx="0" cy="0"/></a:xfrm></p:grpSpPr>'
@@ -112,10 +116,56 @@ def build_presentation(file_name: PathLike, all_professors: Iterable[Professor],
 
 
 if __name__ == "__main__":
-    all_profs = Professor.from_website()
+    parser = ArgumentParser(prog='professorFlashcards',
+                            description='Create flashcard PowerPoint of BYU Religion Professors',
+                            epilog='More features to be added:'
+                                   'room flashcards, other department flashcards, joke slides, etc.',
+                            prefix_chars=r'-/'
+                            )
+    parser.add_argument('-o', '--output', help='name of output file (default: professor_flashcards_date_time')
+
+    parser.add_argument('--refreshall', action='store_true',
+                        help='refresh both pictures and professor-csv. '
+                             'Has preference over --refreshpictures and --refreshcsv (default: %(default)s')
+
+    parser.add_argument('--refreshpictures', action='store_true',
+                        help='force refresh of pictures (default: %(default)s')
+
+    parser.add_argument('--refreshcsv', action='store_true', help='force refresh of pictures (default: %(default)s')
+
+    parser.add_argument('--csvpath', default='professors.csv',
+                        help='filename for csv file used. '
+                             'If --refreshall or --refreshcsv is true, file is overwritten. '
+                             'If the file doesn\'t exist, the file is created and populated from online.'
+                             '(default: %(default)s')
+
+    parser.add_argument('--picturespath', default='pictures',
+                        help='filename for csv file used. '
+                             'If --refreshall or --refreshpictures is true, directory is overwritten. '
+                             'If the directory doesn\'t exist, the directory is created and populated from online.'
+                             '(default: %(default)s')
+
+    namespace = parser.parse_args()
+
+    all_profs = list()
+
+    if (namespace.refreshall or namespace.refreshcsv) and path.isfile(namespace.csvpath):
+        all_profs = Professor.from_website()
+        Professor.to_csv(namespace.csvpath, all_profs)
+    else:
+        all_profs = Professor.from_csv(namespace.csvpath)
+
+    if (namespace.refreshall or namespace.refreshpictures) and path.isdir(namespace.picturespath):
+        Professor.download_all_photos(all_profs, namespace.picturespath)
+
+    output_path = namespace.output
+    if not output_path:
+        formatted_time = datetime.now().strftime('%Y-%m-%d_%H-%M-%S')
+        output_path = 'professor_flashcards_' + formatted_time + '.pptm'
+
     filtered_profs = (prof for prof in all_profs
                       if prof.job_title not in ('Adjunct Instructor', 'Visiting Instructor', 'Preservice', 'On Leave')
                       if prof.department not in ('Salt Lake Center',)
                       )
 
-    build_presentation(Path('Example.pptm'), filtered_profs, Path('FlashcardStartingPowerpoint.pptm'))
+    build_presentation(Path(output_path), filtered_profs, INPUT_FILE)
