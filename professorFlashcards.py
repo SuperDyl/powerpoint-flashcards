@@ -136,13 +136,13 @@ if __name__ == "__main__":
     parser.add_argument('--csvpath', default='professors.csv',
                         help='filename for csv file used. '
                              'If --refreshall or --refreshcsv is true, file is overwritten. '
-                             'If the file doesn\'t exist, the file is created and populated from online.'
+                             "If the file doesn't exist, the file is created and populated from online."
                              '(default: %(default)s')
 
     parser.add_argument('--picturespath', default='pictures',
                         help='filename for csv file used. '
                              'If --refreshall or --refreshpictures is true, directory is overwritten. '
-                             'If the directory doesn\'t exist, the directory is created and populated from online.'
+                             "If the directory doesn't exist, the directory is created and populated from online."
                              '(default: %(default)s')
 
     namespace = parser.parse_args()
