@@ -149,13 +149,13 @@ if __name__ == "__main__":
 
     all_profs = list()
 
-    if (namespace.refreshall or namespace.refreshcsv) and path.isfile(namespace.csvpath):
+    if (namespace.refreshall or namespace.refreshcsv) or not path.isfile(namespace.csvpath):
         all_profs = Professor.from_website()
         Professor.to_csv(namespace.csvpath, all_profs)
     else:
         all_profs = Professor.from_csv(namespace.csvpath)
 
-    if (namespace.refreshall or namespace.refreshpictures) and path.isdir(namespace.picturespath):
+    if (namespace.refreshall or namespace.refreshpictures) or not path.isdir(namespace.picturespath):
         Professor.download_all_photos(all_profs, namespace.picturespath)
 
     output_path = namespace.output
