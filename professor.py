@@ -10,7 +10,6 @@ RELIGION_DIR_URL - url for Religious Education at BYU
 """
 
 from src.employee.employee import *
-
 from src.employee.room import Room
 
 from bs4.element import Tag as BeautifulSoup_Tag
@@ -34,9 +33,10 @@ class ProfessorProcessor(EmployeeProcessor):
     """
 
     DEFAULT_CONTAINER = 'PromoVerticalImage'
+    DEFAULT_SUPER_CONTAINER = 'ListVerticalImage-items-item'
 
-    def __init__(self, container: str = DEFAULT_CONTAINER):
-        super().__init__(container)
+    def __init__(self, container: str = DEFAULT_CONTAINER, super_container: str = DEFAULT_SUPER_CONTAINER):
+        super().__init__(container, super_container)
 
 
 class Professor(Employee):
