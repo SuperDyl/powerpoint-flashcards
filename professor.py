@@ -2,15 +2,15 @@
 Processes and stores data about Professors in BYU's Religious Education
 
 Classes:
-Professor - Store data for a employee in BYU's Religious Education.
-ProfessorProcessor - Functions used to get BrightSpot employee data.
+Professor - Store data for a brightspot_employee in BYU's Religious Education.
+ProfessorProcessor - Functions used to get BrightSpot brightspot_employee data.
 
 Constants:
 RELIGION_DIR_URL - url for Religious Education at BYU
 """
 
-from src.employee.employee import *
-from src.employee.room import Room
+from src.brightspot_employee.employee import *
+from src.brightspot_employee.room import Room
 
 from bs4.element import Tag as BeautifulSoup_Tag
 
@@ -21,14 +21,14 @@ RELIGION_DIR_URL = 'https://religion.byu.edu/directory'
 
 class ProfessorProcessor(EmployeeProcessor):
     """
-    Functions used to get employee data for Religious Education faculty and staff.
+    Functions used to get brightspot_employee data for Religious Education faculty and staff.
 
     This class assumes html data comes from RELIGION_DIR_URL
     Subclass for use with Professor by setting Professor.processor to a subclass of ProfessorProcessor
     or the processor attribute of a subclass of Professor
 
     Constants:
-    DEFAULT_CONTAINER - Default container for employee's to be in within this BrightSpot directory page.
+    DEFAULT_CONTAINER - Default container for brightspot_employee's to be in within this BrightSpot directory page.
 
     """
 
@@ -44,7 +44,7 @@ class Professor(Employee):
     Convenience improvements to Employee to better pull and store information for BYU's Religious Education.
 
     Class Attributes:
-    processor - class used for processing all employee fields
+    processor - class used for processing all brightspot_employee fields
     """
 
     processor = ProfessorProcessor()
@@ -58,7 +58,7 @@ class Professor(Employee):
         """
         Create a Professor using a BeautifulSoup tag object.
 
-        :param tag: : BeautifulSoup_Tag containing exactly one employee's data
+        :param tag: : BeautifulSoup_Tag containing exactly one brightspot_employee's data
         :return: Professor instance
         """
         return super().from_html_tag(tag)
