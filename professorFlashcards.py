@@ -10,7 +10,7 @@ TIMING: XML for animation timings. Necessary for adding animations to the PowerP
 from templates import build_professor_slide_func
 from pptxtemplate import SlideTemplate
 
-from src.professor import Professor
+from professor import Professor
 
 from pptx import Presentation
 
