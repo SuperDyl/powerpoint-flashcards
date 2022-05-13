@@ -25,7 +25,7 @@ from argparse import ArgumentParser
 from datetime import datetime
 import sys
 
-INPUT_FILE = path.join('src', 'FlashcardStartingPowerpoint.pptm')
+INPUT_FILE = path.join('FlashcardStartingPowerpoint.pptm')
 
 X_FRM = r'<p:grpSpPr><a:xfrm><a:off x="0" y="0"/><a:ext cx="0" cy="0"/>' \
         r'<a:chOff x="0" y="0"/><a:chExt cx="0" cy="0"/></a:xfrm></p:grpSpPr>'
@@ -96,7 +96,7 @@ def find_file_extension(file_name: str, directory: Optional[PathLike] = None) ->
 
 
 def build_presentation(file_name: PathLike, all_professors: Iterable[Professor], start_file: Optional[PathLike] = None,
-                       pictures_path: PathLike = path.join('data', 'pictures')) -> None:
+                       pictures_path: PathLike = path.join('..', 'data', 'pictures')) -> None:
     """
     Create a flashcards pptx of each professor in all_professors.
 
@@ -128,9 +128,9 @@ if __name__ == "__main__":
                                    'room flashcards, other department flashcards, joke slides, etc.',
                             prefix_chars=r'-/'
                             )
-    parser.add_argument('-o', '--output', help='name of output file (default: professor_flashcards_date_time.pptm')
+    parser.add_argument('-o', '--output', help='name of output file (default: ../professor_flashcards_date_time.pptm')
 
-    parser.add_argument('--onlyrefresh', action='store_true')
+    parser.add_argument('--onlyrefresh', action='store_true', help='skips creating the powerpoint')
 
     parser.add_argument('--refreshall', action='store_true',
                         help='refresh both pictures and professor-csv. '
@@ -141,13 +141,13 @@ if __name__ == "__main__":
 
     parser.add_argument('--refreshcsv', action='store_true', help='force refresh of pictures (default: %(default)s')
 
-    parser.add_argument('--csvpath', default=path.join('data', 'professors.csv'),
+    parser.add_argument('--csvpath', default=path.join('..', 'data', 'professors.csv'),
                         help='filename for csv file used. '
                              'If --refreshall or --refreshcsv is true, file is overwritten. '
                              "If the file doesn't exist, the file is created and populated from online."
                              '(default: %(default)s')
 
-    parser.add_argument('--picturespath', default=path.join('data', 'pictures'),
+    parser.add_argument('--picturespath', default=path.join('..', 'data', 'pictures'),
                         help='filename for csv file used. '
                              'If --refreshall or --refreshpictures is true, directory is overwritten. '
                              "If the directory doesn't exist, the directory is created and populated from online."
@@ -175,7 +175,7 @@ if __name__ == "__main__":
     output_path = namespace.output
     if not output_path:
         formatted_time = datetime.now().strftime('%Y-%m-%d_%H-%M-%S')
-        output_path = 'professor_flashcards_' + formatted_time + '.pptm'
+        output_path = path.join('..', ('professor_flashcards_' + formatted_time + '.pptm'))
 
     filtered_profs = (prof for prof in all_profs
                       if prof.job_title not in ('Adjunct Instructor', 'Visiting Instructor', 'Preservice', 'On Leave')
