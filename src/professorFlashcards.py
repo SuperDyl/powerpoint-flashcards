@@ -24,7 +24,7 @@ import re
 from argparse import ArgumentParser
 from datetime import datetime
 
-INPUT_FILE = Path('FlashcardStartingPowerpoint.pptm')
+INPUT_FILE = path.join('src', 'FlashcardStartingPowerpoint.pptm')
 
 X_FRM = r'<p:grpSpPr><a:xfrm><a:off x="0" y="0"/><a:ext cx="0" cy="0"/>' \
         r'<a:chOff x="0" y="0"/><a:chExt cx="0" cy="0"/></a:xfrm></p:grpSpPr>'
@@ -133,13 +133,13 @@ if __name__ == "__main__":
 
     parser.add_argument('--refreshcsv', action='store_true', help='force refresh of pictures (default: %(default)s')
 
-    parser.add_argument('--csvpath', default='professors.csv',
+    parser.add_argument('--csvpath', default=path.join('data', 'professors.csv'),
                         help='filename for csv file used. '
                              'If --refreshall or --refreshcsv is true, file is overwritten. '
                              "If the file doesn't exist, the file is created and populated from online."
                              '(default: %(default)s')
 
-    parser.add_argument('--picturespath', default='pictures',
+    parser.add_argument('--picturespath', default=path.join('data', 'pictures'),
                         help='filename for csv file used. '
                              'If --refreshall or --refreshpictures is true, directory is overwritten. '
                              "If the directory doesn't exist, the directory is created and populated from online."
