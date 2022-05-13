@@ -3,7 +3,7 @@
   <component name="ProjectModuleManager">
     <modules>
       <module fileurl="file://$PROJECT_DIR$/../brightspot-employee/.idea/brightspot-employee.iml" filepath="$PROJECT_DIR$/../brightspot-employee/.idea/brightspot-employee.iml" />
-      <module fileurl="file://$PROJECT_DIR$/.idea/powerpoint-flashcards2.iml" filepath="$PROJECT_DIR$/.idea/powerpoint-flashcards2.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/powerpoint-flashcards.iml" filepath="$PROJECT_DIR$/.idea/powerpoint-flashcards.iml" />
     </modules>
   </component>
 </project>
