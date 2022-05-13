@@ -23,6 +23,7 @@ import shutil
 import re
 from argparse import ArgumentParser
 from datetime import datetime
+import sys
 
 INPUT_FILE = path.join('src', 'FlashcardStartingPowerpoint.pptm')
 
@@ -94,21 +95,26 @@ def find_file_extension(file_name: str, directory: Optional[PathLike] = None) ->
         return None
 
 
-def build_presentation(file_name: PathLike, all_professors: Iterable[Professor],
-                       start_file: Optional[PathLike] = None) -> None:
+def build_presentation(file_name: PathLike, all_professors: Iterable[Professor], start_file: Optional[PathLike] = None,
+                       pictures_path: PathLike = path.join('data', 'pictures')) -> None:
     """
     Create a flashcards pptx of each professor in all_professors.
 
     :param file_name: name to save the flashcards PowerPoint as
     :param all_professors: all professors to have slides in the PowerPoint
     :param start_file: file to be appended to. If None, creates a new file from scratch
+    :param pictures_path: path to directory containing all pictures
     """
     presentation = Presentation(start_file)
     slides_count = len(presentation.slides)
     add_prof_slide = build_professor_slide_func(SlideTemplate())
 
     for prof in all_professors:
-        picture = find_file_extension(prof.full_name, Path('pictures'))
+        picture = find_file_extension(prof.full_name, pictures_path)
+        if picture is None:
+            prof.download_photo(pictures_path)
+            picture = find_file_extension(prof.full_name, pictures_path)
+
         add_prof_slide(presentation, prof.full_name, str(picture))
 
     presentation.save(file_name)
@@ -122,7 +128,9 @@ if __name__ == "__main__":
                                    'room flashcards, other department flashcards, joke slides, etc.',
                             prefix_chars=r'-/'
                             )
-    parser.add_argument('-o', '--output', help='name of output file (default: professor_flashcards_date_time')
+    parser.add_argument('-o', '--output', help='name of output file (default: professor_flashcards_date_time.pptm')
+
+    parser.add_argument('--onlyrefresh', action='store_true')
 
     parser.add_argument('--refreshall', action='store_true',
                         help='refresh both pictures and professor-csv. '
@@ -145,6 +153,9 @@ if __name__ == "__main__":
                              "If the directory doesn't exist, the directory is created and populated from online."
                              '(default: %(default)s')
 
+    parser.add_argument('--editpresentation', default=INPUT_FILE,
+                        help='path of presentation to add flashcards to. (default: %(default)s')
+
     namespace = parser.parse_args()
 
     all_profs = list()
@@ -158,6 +169,9 @@ if __name__ == "__main__":
     if (namespace.refreshall or namespace.refreshpictures) or not path.isdir(namespace.picturespath):
         Professor.download_all_photos(all_profs, namespace.picturespath)
 
+    if namespace.onlyrefresh:
+        sys.exit()
+
     output_path = namespace.output
     if not output_path:
         formatted_time = datetime.now().strftime('%Y-%m-%d_%H-%M-%S')
@@ -168,4 +182,4 @@ if __name__ == "__main__":
                       if prof.department not in ('Salt Lake Center',)
                       )
 
-    build_presentation(Path(output_path), filtered_profs, INPUT_FILE)
+    build_presentation(Path(output_path), filtered_profs, Path(namespace.editpresentation))
