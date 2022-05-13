@@ -9,8 +9,8 @@ Constants:
 RELIGION_DIR_URL - url for Religious Education at BYU
 """
 
-from src.brightspot_employee.employee import *
-from src.brightspot_employee.room import Room
+from brightspot_employee.employee import *
+from brightspot_employee.room import Room
 
 from bs4.element import Tag as BeautifulSoup_Tag
 
