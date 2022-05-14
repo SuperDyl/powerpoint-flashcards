@@ -14,7 +14,7 @@ from professor import Professor
 
 from pptx import Presentation
 
-from os import scandir, getcwd, path, PathLike
+from os import scandir, getcwd, path, PathLike, makedirs
 from pathlib import Path
 from typing import Optional, Iterable
 from zipfile import ZipFile
@@ -162,7 +162,8 @@ if __name__ == "__main__":
 
     if (namespace.refreshall or namespace.refreshcsv) or not path.isfile(namespace.csvpath):
         all_profs = Professor.from_website()
-        Professor.to_csv(namespace.csvpath, all_profs)
+        makedirs(Path(namespace.csvpath).parent, exist_ok=True)
+        Professor.to_csv(namespace.csvpath, all_profs)  # TODO: have employee use mkdirs in to_csv()
     else:
         all_profs = Professor.from_csv(namespace.csvpath)
 
