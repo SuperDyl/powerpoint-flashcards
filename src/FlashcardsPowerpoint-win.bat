@@ -2,8 +2,9 @@
 @echo "This file can also be run using command line arguments. Use -h for help"
 call .\venv\Scripts\activate.bat
 cd src
-@echo "Running professorFlashcards.py with supplied arguments"
-python -m professorFlashcards %*
+@echo "Running employeeFlashcards.py with supplied arguments"
+@echo "It may take a couple minutes if re-downloading photos"
+python -m employeeFlashcards %*
 cd ..
 deactivate
 @echo "Done"

@@ -10,7 +10,7 @@ TIMING: XML for animation timings. Necessary for adding animations to the PowerP
 from templates import build_professor_slide_func
 from pptxtemplate import SlideTemplate
 
-from professor import Professor
+from reledemployee import RelEdEmployee
 
 from pptx import Presentation
 
@@ -95,7 +95,8 @@ def find_file_extension(file_name: str, directory: Optional[PathLike] = None) ->
         return None
 
 
-def build_presentation(file_name: PathLike, all_professors: Iterable[Professor], start_file: Optional[PathLike] = None,
+def build_presentation(file_name: PathLike, all_professors: Iterable[RelEdEmployee],
+                       start_file: Optional[PathLike] = None,
                        pictures_path: PathLike = path.join('..', 'data', 'pictures')) -> None:
     """
     Create a flashcards pptx of each professor in all_professors.
@@ -122,18 +123,17 @@ def build_presentation(file_name: PathLike, all_professors: Iterable[Professor],
 
 
 if __name__ == "__main__":
-    parser = ArgumentParser(prog='professorFlashcards',
-                            description='Create flashcard PowerPoint of BYU Religion Professors',
+    parser = ArgumentParser(description='Create flashcard PowerPoint of BYU Religion employees',
                             epilog='More features to be added:'
                                    'room flashcards, other department flashcards, joke slides, etc.',
                             prefix_chars=r'-/'
                             )
-    parser.add_argument('-o', '--output', help='name of output file (default: ../professor_flashcards_date_time.pptm')
+    parser.add_argument('-o', '--output', help='name of output file (default: ../employee_flashcards_date_time.pptm')
 
     parser.add_argument('--onlyrefresh', action='store_true', help='skips creating the powerpoint')
 
     parser.add_argument('--refreshall', action='store_true',
-                        help='refresh both pictures and professor-csv. '
+                        help='refresh both pictures and employee-csv. '
                              'Has preference over --refreshpictures and --refreshcsv (default: %(default)s')
 
     parser.add_argument('--refreshpictures', action='store_true',
@@ -141,7 +141,7 @@ if __name__ == "__main__":
 
     parser.add_argument('--refreshcsv', action='store_true', help='force refresh of pictures (default: %(default)s')
 
-    parser.add_argument('--csvpath', default=path.join('..', 'data', 'professors.csv'),
+    parser.add_argument('--csvpath', default=path.join('..', 'data', 'employees.csv'),
                         help='filename for csv file used. '
                              'If --refreshall or --refreshcsv is true, file is overwritten. '
                              "If the file doesn't exist, the file is created and populated from online."
@@ -161,14 +161,14 @@ if __name__ == "__main__":
     all_profs = list()
 
     if (namespace.refreshall or namespace.refreshcsv) or not path.isfile(namespace.csvpath):
-        all_profs = Professor.from_website()
+        all_profs = RelEdEmployee.from_website()
         makedirs(Path(namespace.csvpath).parent, exist_ok=True)
-        Professor.to_csv(namespace.csvpath, all_profs)  # TODO: have employee use mkdirs in to_csv()
+        RelEdEmployee.to_csv(namespace.csvpath, all_profs)  # TODO: have employee use mkdirs in to_csv()
     else:
-        all_profs = Professor.from_csv(namespace.csvpath)
+        all_profs = RelEdEmployee.from_csv(namespace.csvpath)
 
     if (namespace.refreshall or namespace.refreshpictures) or not path.isdir(namespace.picturespath):
-        Professor.download_all_photos(all_profs, namespace.picturespath)
+        RelEdEmployee.download_all_photos(all_profs, namespace.picturespath)
 
     if namespace.onlyrefresh:
         sys.exit()

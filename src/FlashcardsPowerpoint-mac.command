@@ -7,6 +7,7 @@ cd "${DIR}"
 source ./venv/bin/activate
 
 cd ./src
-echo "Running professorFlashcards.py with supplied arguments"
-python -m professorFlashcards "$@"
+echo "Running employeeFlashcards.py with supplied arguments"
+echo "It may take a couple minutes if re-downloading photos"
+python -m employeeFlashcards "$@"
 echo

@@ -2,8 +2,8 @@
 Processes and stores data about Professors in BYU's Religious Education
 
 Classes:
-Professor - Store data for a brightspot_employee in BYU's Religious Education.
-ProfessorProcessor - Functions used to get BrightSpot brightspot_employee data.
+RelEdEmployee - Store data for a brightspot_employee in BYU's Religious Education.
+RelEdEmployeeProcessor - Functions used to get BrightSpot brightspot_employee data.
 
 Constants:
 RELIGION_DIR_URL - url for Religious Education at BYU
@@ -19,13 +19,13 @@ from typing import List
 RELIGION_DIR_URL = 'https://religion.byu.edu/directory'
 
 
-class ProfessorProcessor(EmployeeProcessor):
+class RelEdEmployeeProcessor(EmployeeProcessor):
     """
     Functions used to get brightspot_employee data for Religious Education faculty and staff.
 
     This class assumes html data comes from RELIGION_DIR_URL
-    Subclass for use with Professor by setting Professor.processor to a subclass of ProfessorProcessor
-    or the processor attribute of a subclass of Professor
+    Subclass for use with RelEdEmployee by setting RelEdEmployee.processor to a subclass of RelEdEmployeeProcessor
+    or the processor attribute of a subclass of RelEdEmployee
 
     Constants:
     DEFAULT_CONTAINER - Default container for brightspot_employee's to be in within this BrightSpot directory page.
@@ -39,7 +39,7 @@ class ProfessorProcessor(EmployeeProcessor):
         super().__init__(container, super_container)
 
 
-class Professor(Employee):
+class RelEdEmployee(Employee):
     """
     Convenience improvements to Employee to better pull and store information for BYU's Religious Education.
 
@@ -47,7 +47,7 @@ class Professor(Employee):
     processor - class used for processing all brightspot_employee fields
     """
 
-    processor = ProfessorProcessor()
+    processor = RelEdEmployeeProcessor()
 
     def __init__(self, first_name: str, last_name: str, room_address: Room,
                  page_url: str, telephone: str, department: str, job_title: str):
@@ -56,10 +56,10 @@ class Professor(Employee):
     @classmethod
     def from_html_tag(cls: Type[E], tag: BeautifulSoup_Tag) -> Type[E]:
         """
-        Create a Professor using a BeautifulSoup tag object.
+        Create a RelEdEmployee using a BeautifulSoup tag object.
 
         :param tag: : BeautifulSoup_Tag containing exactly one brightspot_employee's data
-        :return: Professor instance
+        :return: RelEdEmployee instance
         """
         return super().from_html_tag(tag)
 
