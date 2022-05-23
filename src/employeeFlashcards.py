@@ -176,7 +176,7 @@ if __name__ == "__main__":
     output_path = namespace.output
     if not output_path:
         formatted_time = datetime.now().strftime('%Y-%m-%d_%H-%M-%S')
-        output_path = path.join('..', ('professor_flashcards_' + formatted_time + '.pptm'))
+        output_path = path.join('..', ('employee_flashcards_' + formatted_time + '.pptm'))
 
     filtered_profs = (prof for prof in all_profs
                       if prof.job_title not in ('Adjunct Instructor', 'Visiting Instructor', 'Preservice', 'On Leave')
