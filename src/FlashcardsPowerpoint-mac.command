@@ -10,4 +10,5 @@ cd ./src
 echo "Running employeeFlashcards.py with supplied arguments"
 echo "It may take a couple minutes if re-downloading photos"
 python -m employeeFlashcards "$@"
+deactivate
 echo
