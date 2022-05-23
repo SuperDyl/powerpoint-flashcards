@@ -18,4 +18,4 @@ One of the most useful arguments would be --refreshall .
 It forces pulling employee information and photos from online.
 
 The existing professor data can be edited easily:
-professors.csv
+employees.csv
