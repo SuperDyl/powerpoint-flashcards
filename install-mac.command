@@ -2,20 +2,17 @@
 echo
 echo
 echo
-echo "Setting up or re-setting up Python libraries in a virtual environment"
-echo "Program will fail if Python3.6 is not installed"
+echo "Setting up or re-setting up Python3 libraries in a virtual environment"
 DIR=$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )
 cd "${DIR}"
 rm -rf ./venv
-python3.6 -m venv venv
-source ./venv/bin/activate
+python3 -m venv venv
 
-python -m pip install --upgrade pip
-python -m pip install --upgrade setuptools
-python -m pip install --upgrade wheel
+./venv/bin/python3 -m pip install --upgrade pip
+./venv/bin/python3 -m pip install --upgrade setuptools
+./venv/bin/python3 -m pip install --upgrade wheel
 
-python -m pip install -r src/requirements.txt
-deactivate
+./venv/bin/python3 -m pip install -r src/requirements.txt
 cp ./src/FlashcardsPowerpoint-mac.command ./
 echo
 echo
