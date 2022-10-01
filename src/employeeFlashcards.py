@@ -46,7 +46,7 @@ TIMING = r'</p:clrMapOvr><p:timing><p:tnLst><p:par><p:cTn id="1" dur="indefinite
          r'</p:childTnLst></p:cTn></p:par></p:tnLst><p:bldLst><p:bldP spid="2" grpId="0"/></p:bldLst></p:timing>'
 
 
-def add_animations(pptx_file: PathLike, start_slide: int = 0) -> None:
+def add_animations(pptx_file: str, start_slide: int = 0) -> None:
     """
     Add animations to the PowerPoint.
     This is a duck-tape solution:
@@ -95,9 +95,9 @@ def find_file_extension(file_name: str, directory: Optional[PathLike] = None) ->
         return None
 
 
-def build_presentation(file_name: PathLike, all_professors: Iterable[RelEdEmployee],
-                       start_file: Optional[PathLike] = None,
-                       pictures_path: PathLike = path.join('..', 'data', 'pictures')) -> None:
+def build_presentation(file_name: str, all_professors: Iterable[RelEdEmployee],
+                       start_file: Optional[str] = None,
+                       pictures_path: str = path.join('..', 'data', 'pictures')) -> None:
     """
     Create a flashcards pptx of each professor in all_professors.
 
@@ -111,10 +111,10 @@ def build_presentation(file_name: PathLike, all_professors: Iterable[RelEdEmploy
     add_prof_slide = build_professor_slide_func(SlideTemplate())
 
     for prof in all_professors:
-        picture = find_file_extension(prof.full_name, pictures_path)
+        picture = find_file_extension(prof.full_name, Path(pictures_path))
         if picture is None:
             prof.download_photo(pictures_path)
-            picture = find_file_extension(prof.full_name, pictures_path)
+            picture = find_file_extension(prof.full_name, Path(pictures_path))
 
         add_prof_slide(presentation, prof.full_name, str(picture))
 
@@ -183,4 +183,4 @@ if __name__ == "__main__":
                       if prof.department not in ('Salt Lake Center',)
                       )
 
-    build_presentation(Path(output_path), filtered_profs, Path(namespace.editpresentation))
+    build_presentation(output_path, filtered_profs, namespace.editpresentation)
