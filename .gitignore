@@ -1,6 +1,6 @@
-/data/employees.csv
-/data/pictures/
+/data
 /venv
 /FlashcardsPowerpoint-win.bat
 /FlashcardsPowerpoint-mac.command
 __pycache__
+/.idea
